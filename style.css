@@ -1,0 +1,105 @@
+/* Custom styles to complement Tailwind CSS */
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Enhanced input styling */
+input[type="number"] {
+    transition: all 0.3s ease;
+}
+
+input[type="number"]:focus {
+    transform: translateY(-1px);
+}
+
+/* Table row transitions */
+table tbody tr {
+    transition: all 0.2s ease;
+}
+
+table tbody tr:hover {
+    background-color: rgba(239, 246, 255, 0.5);
+}
+
+/* Button ripple effect */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Result cards animation */
+.result > div {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    body {
+        padding: 0;
+    }
+
+    .container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+/* Grade Points styling */
+#gradePoints1, #gradePoints2, #gradePoints3, 
+#gradePoints4, #gradePoints5, #gradePoints6 {
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+/* Mobile card hover effects */
+@media (max-width: 768px) {
+    .bg-gradient-to-br {
+        transition: all 0.3s ease;
+    }
+
+    .rounded-xl:active {
+        transform: scale(0.98);
+    }
+    th, td {
+        padding: 12px;
+    }
+
+    input[type="number"] {
+        padding: 8px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 1em;
+    }
+}
