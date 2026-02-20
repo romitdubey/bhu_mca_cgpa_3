@@ -13,8 +13,28 @@ function calculateCGPA() {
     // Credits for: ML, IOT, IR, Technical Writing, Minor Project, NPTEL
     const credits = [5, 4, 4, 2, 3, 2];
 
-    // Helper to get the value from the visible input when there are duplicate IDs
+    // Helper to get the value from the appropriate input when duplicate IDs exist
+    // Prefer inputs inside the current layout container (desktop table vs mobile cards)
     function getFieldValue(id) {
+        // Determine whether layout is desktop (md and up) or mobile
+        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+        // Tailwind keeps the responsive classes literal in the class attribute
+        // Desktop table container has class "md:block" and mobile has "md:hidden"
+        const desktopContainer = document.querySelector('.md\\:block');
+        const mobileContainer = document.querySelector('.md\\:hidden');
+
+        // Try to find the input inside the currently active container first
+        if (isDesktop && desktopContainer) {
+            const el = desktopContainer.querySelector('#' + id);
+            if (el) return parseFloat(el.value || 0);
+        }
+        if (!isDesktop && mobileContainer) {
+            const el = mobileContainer.querySelector('#' + id);
+            if (el) return parseFloat(el.value || 0);
+        }
+
+        // Fallback: find any matching element and return first visible value
         const elems = document.querySelectorAll('#' + id);
         if (!elems || elems.length === 0) return 0;
         for (const el of elems) {
@@ -22,7 +42,7 @@ function calculateCGPA() {
             const visible = style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
             if (visible) return parseFloat(el.value || 0);
         }
-        // fallback to first element's value
+        // final fallback to first element's value
         return parseFloat(elems[0].value || 0);
     }
 
