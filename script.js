@@ -10,27 +10,43 @@ function calculateGradePoints(marks) {
 }
 
 function calculateCGPA() {
-    const credits = [5, 4, 4, 2, 3,2];
-    const avgMarks1 = (parseFloat(document.getElementById('marks1').value || 0) + parseFloat(document.getElementById('marks2').value || 0)) / 2;
-    const avgMarks2 = (parseFloat(document.getElementById('marks3').value || 0) + parseFloat(document.getElementById('marks4').value || 0)) / 2;
-    const avgMarks3 = (parseFloat(document.getElementById('marks5').value || 0) + parseFloat(document.getElementById('marks6').value || 0)) / 2;
+    // Credits for: ML, IOT, IR, Technical Writing, Minor Project, NPTEL
+    const credits = [5, 4, 4, 2, 3, 2];
+
+    // Helper to get the value from the visible input when there are duplicate IDs
+    function getFieldValue(id) {
+        const elems = document.querySelectorAll('#' + id);
+        if (!elems || elems.length === 0) return 0;
+        for (const el of elems) {
+            const style = window.getComputedStyle(el);
+            const visible = style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+            if (visible) return parseFloat(el.value || 0);
+        }
+        // fallback to first element's value
+        return parseFloat(elems[0].value || 0);
+    }
+
+    const avgMarks1 = (getFieldValue('marks1') + getFieldValue('marks2')) / 2;
+    const avgMarks2 = (getFieldValue('marks3') + getFieldValue('marks4')) / 2;
+    const avgMarks3 = (getFieldValue('marks5') + getFieldValue('marks6')) / 2;
 
     const marks = [
         avgMarks1,
         avgMarks2,
         avgMarks3,
-        parseFloat(document.getElementById('marks7').value || 0),
-        parseFloat(document.getElementById('marks8').value || 0),
-        parseFloat(document.getElementById('marks9').value || 0)
+        getFieldValue('marks7'),
+        getFieldValue('marks8'),
+        getFieldValue('marks9')
     ];
 
     let totalGradePoints = 0;
     let totalCredits = 0;
 
-    // Calculate grade points for first 5 subjects
-    for (let i = 0; i < 6; i++) {
+    // Calculate grade points for each subject and update all matching display elements
+    for (let i = 0; i < marks.length; i++) {
         const gradePoints = calculateGradePoints(marks[i]);
-        document.getElementById(`gradePoints${i + 1}`).innerText = gradePoints;
+        const gpElems = document.querySelectorAll(`#gradePoints${i + 1}`);
+        gpElems.forEach(e => e.innerText = gradePoints);
         totalGradePoints += gradePoints * credits[i];
         totalCredits += credits[i];
     }
